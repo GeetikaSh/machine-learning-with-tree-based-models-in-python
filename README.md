@@ -1,9 +1,10 @@
 # Machine Learning with Tree-Based Models in Python
 
 Tree-based models are a family of supervised learning algorithms that create models in the form of a tree structure. 
-These models are powerful and versatile, excelling in both regression and classification tasks.\
-This Repository consist of the Tree Based Model notes. I am also going to attach Data Camp Solutions to it as well.
-I am trying to create a basic notes file you you that you can review or read before implimenting ant tree based model to help you get started my the modeling.
+These models are powerful and versatile, excelling in both regression and classification tasks.
+
+This repository consists of the Tree-Based Model notes. I am also going to attach DataCamp solutions to it as well. 
+The aim is to create a basic notes file that you can review or read before implementing any tree-based model to help you get started with modeling.
 
 ---
 
@@ -21,27 +22,24 @@ I am trying to create a basic notes file you you that you can review or read bef
    - Splitting Criteria (Gini, Entropy, MSE)
    - Overfitting and Pruning
    - Feature Importance
-4. **Implementation in Python**
-   - Libraries: `scikit-learn`, `XGBoost`, `LightGBM`
-   - Key Functions and Parameters
-5. **Model Training and Evaluation**
+4. **Model Training and Evaluation**
    - Train-Test Split
    - Cross-Validation
    - Metrics: Accuracy, RMSE, AUC
-6. **Advanced Topics**
+5. **Advanced Topics**
    - Hyperparameter Tuning
    - Handling Imbalanced Data
    - Feature Engineering
    - Interpretability of Models
-7. **Case Study**
+6. **Case Study**
    - End-to-End Pipeline: Predicting Customer Churn
    - Data Preprocessing
    - Model Building
    - Model Evaluation
-8. **Best Practices**
+7. **Best Practices**
    - Avoiding Overfitting
    - Ensuring Generalizability
-9. **Resources and References**
+8. **Resources and References**
    - Recommended Reading
    - Courses and Tutorials
 
@@ -49,7 +47,8 @@ I am trying to create a basic notes file you you that you can review or read bef
 
 ## 1. Introduction
 
-Tree-based models mimic human decision-making by learning decision rules from data. These models can handle categorical and numerical data and are non-parametric, making them flexible for a wide range of datasets.
+Tree-based models mimic human decision-making by learning decision rules from data. These models can handle categorical and
+numerical data and are non-parametric, making them flexible for a wide range of datasets.
 
 ---
 
@@ -61,8 +60,95 @@ Tree-based models mimic human decision-making by learning decision rules from da
 
 ### Ensemble Models
 #### Random Forests
-- Combines multiple decision trees to reduce overfitting.
-- Bagging technique for training.
+Random Forest is a powerful and versatile machine learning algorithm that belongs to the family of ensemble learning methods. 
+It works by constructing multiple decision trees during training and 
+outputting the mode of the classes (classification) or mean prediction (regression) from all the trees.
+
+---
+
+##### Key Characteristics of Random Forest
+1. **Ensemble Method**:
+   - Combines multiple decision trees to improve predictive accuracy.
+2. **Bagging (Bootstrap Aggregating)**:
+   - Uses random subsets of the data to train individual trees, ensuring diversity.
+3. **Feature Randomness**:
+   - Each split considers a random subset of features to further reduce correlation among trees.
+4. **Reduces Overfitting**:
+   - By averaging the results of multiple trees, Random Forest prevents overfitting that is common with individual decision trees.
+
+---
+
+##### Advantages of Random Forest
+- **Handles Missing Data**:
+  - Can maintain accuracy with missing values.
+- **Works with Both Classification and Regression**:
+  - Versatile and widely applicable.
+- **Robust to Outliers**:
+  - Can handle noisy and unbalanced datasets effectively.
+- **Feature Importance**:
+  - Provides a measure of the relative importance of each feature.
+
+---
+
+##### Disadvantages of Random Forest
+- **Slower Prediction**:
+  - Due to the need to average multiple trees, it can be slower compared to single-tree models.
+- **Memory Intensive**:
+  - Requires more memory to store multiple trees.
+- **Less Interpretable**:
+  - Compared to single decision trees, Random Forests are more of a "black-box" model.
+
+---
+
+##### How Random Forest Works
+
+1. **Data Sampling**:
+   - Random subsets of the training dataset are sampled with replacement (bootstrap sampling).
+2. **Tree Building**:
+   - Each tree is trained on a different subset of the data.
+   - Random subsets of features are considered at each split.
+3. **Prediction**:
+   - For classification, predictions are made by majority voting among the trees.
+   - For regression, the predictions are averaged.
+
+---
+
+##### Implementation in Python
+
+###### Example: Classification with Random Forest
+```python
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Load dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train Random Forest
+rf = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)
+rf.fit(X_train, y_train)
+
+# Evaluate
+y_pred = rf.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+```
+
+###### Example: Regression with Random Forest
+```python
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+
+# Load dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train Random Forest Regressor
+rf_reg = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42)
+rf_reg.fit(X_train, y_train)
+
+# Evaluate
+y_pred = rf_reg.predict(X_test)
+print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
+```
 
 #### Gradient Boosting Machines
 - Sequentially builds trees to minimize loss.
@@ -88,31 +174,7 @@ Tree-based models mimic human decision-making by learning decision rules from da
 
 ---
 
-## 4. Implementation in Python
-
-### Libraries
-- `scikit-learn`: For Decision Trees and Random Forests.
-- `XGBoost`, `LightGBM`: For advanced boosting methods.
-
-### Example Code (Random Forest)
-```python
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-
-# Load dataset
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
-# Train Random Forest
-rf = RandomForestClassifier(n_estimators=100, random_state=42)
-rf.fit(X_train, y_train)
-
-# Evaluate
-y_pred = rf.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
-
-```
-## 5. Model Training and Evaluation
+## 4. Model Training and Evaluation
 
 ### Key Metrics
 - **Classification**: Accuracy, Precision, Recall, AUC-ROC.
@@ -123,7 +185,7 @@ print("Accuracy:", accuracy_score(y_test, y_pred))
 
 ---
 
-## 6. Advanced Topics
+## 5. Advanced Topics
 
 ### Hyperparameter Tuning
 - **Techniques**:
@@ -149,7 +211,7 @@ print("Accuracy:", accuracy_score(y_test, y_pred))
 
 ---
 
-## 7. Best Practices
+## 6. Best Practices
 
 - Use ensemble methods for better performance.
 - Regularize models to avoid overfitting.
@@ -157,7 +219,7 @@ print("Accuracy:", accuracy_score(y_test, y_pred))
 
 ---
 
-## 8. Resources and References
+## 7. Resources and References
 
 ### Books:
 - *"Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow"* by Aurélien Géron.
