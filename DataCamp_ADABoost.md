@@ -1,3 +1,15 @@
+# Table of Content
+- [Understanding AdaBoost (Adaptive Boosting)](#understanding-adaboost-adaptive-boosting)
+  - [Explanation](#explanation)
+  - [Key Concepts](#key-concepts)
+  - [Algorithm Steps](#algorithm-steps)
+  - [Advantages](#advantages)
+  - [Limitations](#limitations)
+  - [DataCamp Solutions](#datacamp-solutions)
+  - [Interview Questions on AdaBoost](#interview-questions-on-adaboost)
+
+---
+
 # Understanding AdaBoost (Adaptive Boosting)
 
 AdaBoost is a popular boosting algorithm used in machine learning to improve the performance of weak classifiers
@@ -77,51 +89,59 @@ This diagram provides a clear and structured view of the AdaBoost process, helpi
 
 ---
 
-## Python Implementation Example
+## DataCamp Solutions
 
+- **Define ADA Boost Classifier**
 ```python
-from sklearn.ensemble import AdaBoostClassifier
+# Import DecisionTreeClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.datasets import make_classification
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
 
-# Generate a synthetic dataset
-X, y = make_classification(n_samples=500, n_features=20, random_state=42)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+# Import AdaBoostClassifier
+from sklearn.ensemble import AdaBoostClassifier
 
-# Initialize the AdaBoost model
-base_model = DecisionTreeClassifier(max_depth=1)
-adaboost = AdaBoostClassifier(base_estimator=base_model, n_estimators=50, random_state=42)
+# Instantiate dt
+dt = DecisionTreeClassifier(max_depth= 2, random_state=1)
 
-# Train the model
-adaboost.fit(X_train, y_train)
+# Instantiate ada
+ada = AdaBoostClassifier(base_estimator= dt, n_estimators= 180, random_state=1)
+```
+- **Train the AdaBoost classifier**
+``` python
+# Fit ada to the training set
+ada.fit(X_train, y_train)
 
-# Make predictions
-y_pred = adaboost.predict(X_test)
+# Compute the probabilities of obtaining the positive class
+y_pred_proba = ada.predict_proba(X_test)[:,1]
+```
+- **Evaluate the AdaBoost classifier**
+``` python
+# Import roc_auc_score
+from sklearn.metrics import roc_auc_score
 
-# Evaluate performance
-accuracy = accuracy_score(y_test, y_pred)
-print(f"Accuracy: {accuracy * 100:.2f}%")
+# Evaluate test-set roc_auc_score
+ada_roc_auc = roc_auc_score(y_test, y_pred_proba)
+
+# Print roc_auc_score
+print('ROC AUC score: {:.2f}'.format(ada_roc_auc))
 ```
 
 ## Interview Questions On AdaBoost
-**1. How does AdaBoost minimize exponential loss?**\
+**1. How does AdaBoost minimize exponential loss?**
 
 AdaBoost minimizes an exponential loss function by focusing on misclassified points. Each weak learner is optimized to reduce this loss iteratively.
 The exponential loss penalizes large errors more, ensuring misclassified examples receive higher attention in subsequent rounds.
 
-**2. What happens if all weak learners in AdaBoost are perfect classifiers?**\
+**2. What happens if all weak learners in AdaBoost are perfect classifiers?**
 
 If all weak learners are perfect classifiers, AdaBoost would achieve 100% accuracy on the training dataset in fewer iterations.
 However, overfitting might occur, especially if the dataset has noise.
 
-**3.. How does AdaBoost differ from Bagging?**\
+**3.. How does AdaBoost differ from Bagging?**
 
 AdaBoost: Focuses on reweighting data points to handle hard-to-classify examples and combines weak learners sequentially.
 Bagging: Trains multiple models independently on different bootstrapped datasets and averages their predictions. Bagging reduces variance, whereas AdaBoost reduces bias.
 
-**4. How would you address overfitting in AdaBoost?**\
+**4. How would you address overfitting in AdaBoost?**
 
 To address overfitting:
 - Limit the number of iterations (estimators).
@@ -129,7 +149,7 @@ To address overfitting:
 - Add regularization to the weak learners.
 - Reduce the learning rate.
 
-**5. Explain how AdaBoost can handle class imbalance.**\
+**5. Explain how AdaBoost can handle class imbalance.**
 
 AdaBoost inherently reweights data points, giving more importance to misclassified examples.
 In a class-imbalanced dataset, it can focus on the minority class by assigning higher weights to its misclassified samples.
