@@ -1,6 +1,31 @@
 # Understanding AdaBoost (Adaptive Boosting)
 
-AdaBoost is a popular boosting algorithm used in machine learning to improve the performance of weak classifiers. It combines multiple weak learners to create a strong learner capable of achieving higher accuracy.
+AdaBoost is a popular boosting algorithm used in machine learning to improve the performance of weak classifiers
+It combines multiple weak learners to create a strong learner capable of achieving higher accuracy.
+
+![A generalized workflow of the AdaBoost algorithm](https://miro.medium.com/v2/resize:fit:828/format:webp/1*eosJ6Yg0epLuH5kHsMaPWQ.png)
+
+**Source:** [Boosting — Adaboost, Gradient Boost and XGBoost](https://medium.com/@pingsubhak/boosting-adaboost-gradient-boost-and-xgboost-bdda87eed44e)
+
+---
+
+## Explanation:
+
+1. **Initial Data Weighting**:
+   All data points start with equal weights.
+
+2. **Weak Learner Training**:
+   - Train a weak learner (e.g., a decision stump) on the weighted dataset.
+   - Misclassified samples are given higher weights.
+
+3. **Sequential Learning**:
+   Each new weak learner is trained on the updated weights, focusing on the difficult-to-classify examples.
+
+4. **Final Aggregation**:
+   Combine all weak learners using a weighted majority vote, where each learner’s weight is proportional to its accuracy.
+
+This diagram provides a clear and structured view of the AdaBoost process, helping visualize how the algorithm progressively improves performance.
+
 
 ## Key Concepts
 
@@ -19,14 +44,13 @@ AdaBoost is a popular boosting algorithm used in machine learning to improve the
 
 1. **Initialization**:
    Assign equal weights to all training data points:  
-   $w_i = \frac{1}{N}, \; \forall \; i \in \{1, 2, ..., N\}$
+   $w_i = \frac{1}{N}, \; \forall \; i \in \{1, 2, ..., N\}$  
    where $N$ is the total number of samples.
 
 2. **Iterative Training**:
    - For each iteration $t$ (total $T$ iterations):
      1. Train a weak learner on the weighted dataset.
-     2. Compute the weighted error rate $\epsilon_t$:
-        
+     2. Compute the weighted error rate $\epsilon_t$:  
         $\epsilon_t = \frac{\sum_{i=1}^N w_i \cdot \mathbb{I}(y_i \neq h_t(x_i))}{\sum_{i=1}^N w_i}$  
         where $\mathbb{I}$ is an indicator function, $y_i$ is the true label, $x_i$ is the feature vector, and $h_t(x_i)$ is the predicted label.
      3. Compute the model's weight:  
@@ -53,7 +77,7 @@ AdaBoost is a popular boosting algorithm used in machine learning to improve the
 
 ---
 
-## DataCamp Solutions
+## Python Implementation Example
 
 ```python
 from sklearn.ensemble import AdaBoostClassifier
@@ -82,31 +106,31 @@ print(f"Accuracy: {accuracy * 100:.2f}%")
 ```
 
 ## Interview Questions On AdaBoost
-**1. How does AdaBoost minimize exponential loss?**
-Answer:
+**1. How does AdaBoost minimize exponential loss?**\
+
 AdaBoost minimizes an exponential loss function by focusing on misclassified points. Each weak learner is optimized to reduce this loss iteratively.
 The exponential loss penalizes large errors more, ensuring misclassified examples receive higher attention in subsequent rounds.
 
-**2. What happens if all weak learners in AdaBoost are perfect classifiers?**
-Answer:
+**2. What happens if all weak learners in AdaBoost are perfect classifiers?**\
+
 If all weak learners are perfect classifiers, AdaBoost would achieve 100% accuracy on the training dataset in fewer iterations.
 However, overfitting might occur, especially if the dataset has noise.
 
-**3.. How does AdaBoost differ from Bagging?**
-Answer:
+**3.. How does AdaBoost differ from Bagging?**\
+
 AdaBoost: Focuses on reweighting data points to handle hard-to-classify examples and combines weak learners sequentially.
 Bagging: Trains multiple models independently on different bootstrapped datasets and averages their predictions. Bagging reduces variance, whereas AdaBoost reduces bias.
 
-**4. How would you address overfitting in AdaBoost?**
-Answer:
+**4. How would you address overfitting in AdaBoost?**\
+
 To address overfitting:
 - Limit the number of iterations (estimators).
 - Use simpler base learners like decision stumps.
 - Add regularization to the weak learners.
 - Reduce the learning rate.
 
-**5. Explain how AdaBoost can handle class imbalance.**
-Answer:
+**5. Explain how AdaBoost can handle class imbalance.**\
+
 AdaBoost inherently reweights data points, giving more importance to misclassified examples.
 In a class-imbalanced dataset, it can focus on the minority class by assigning higher weights to its misclassified samples.
 However, additional techniques like stratified sampling or modifying the loss function may further improve performance.
